@@ -30,6 +30,8 @@
   (interactive)
   (message "org-tick version %s" "0.0.1"))
 
+(define-prefix-command 'org-tick-ticket-choice-map)
+(define-key org-tick-ticket-choice-map (kbd "q") #'keyboard-quit)
 
 ;;; Utilities
 
@@ -83,19 +85,14 @@
          (repo-path (file-name-directory (expand-file-name repo-property))))
     (magit-status repo-path)))
 
+(define-key org-tick-ticket-choice-map (kbd "g") #'org-tick-open-active-status-magit)
+
 (defun org-tick-open-active ()
   "Open the active ticket in the current buffer."
   (interactive)
   (org-tick--mem-goto (org-tick--get-active-ticket)))
 
-;; TODO: Make this visual like any other decent keymap. not sure how that works exactly.
-(defvar org-tick-ticket-choice-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "g") #'org-tick-open-active-status-magit)
-    (define-key map (kbd "o") #'org-tick-open-active)
-    (define-key map (kbd "q") #'keyboard-quit)
-    map)
-  "Transient keymap used after a choice.")
+(define-key org-tick-ticket-choice-map (kbd "o") #'org-tick-open-active)
 
 (defun org-tick-find ()
   "Select an active ticket from a list of nodes."
@@ -104,8 +101,12 @@
          (selected-ticket-title (completing-read "Select ticket: " completion-options))
          (selected-ticket (cdr (assoc selected-ticket-title completion-options))))
     (org-tick--set-active-ticket selected-ticket)
-    (set-transient-map org-tick-ticket-choice-map)
+    ;; TODO: Make this help string easier to define.
+    (set-transient-map org-tick-ticket-choice-map nil nil
+                       "[o] Open  [g] Magit  [q] Quit")
     ))
+
+(define-key org-tick-ticket-choice-map (kbd "f") #'org-tick-find)
 
 (provide 'org-tick)
 ;;; org-tick.el ends here
