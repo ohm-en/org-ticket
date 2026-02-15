@@ -1,10 +1,13 @@
-;;; org-tick.el --- Placeholder for org-tick -*- lexical-binding: t; -*-
+;;; org-tick.el --- An opinionated org-mode utility for managing tickets. -*- lexical-binding: t; -*-
 
-;; Author: You <you@example.com>
+;;; Commentary:
+;;; TODO: Add commentary
+
+;; Author: ohm-en <git@ohm.one>
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: outlines, org
-;; URL: https://example.com/org-tick
+;; URL: https://github.com/ohm-en/org-ticket/
 
 ;;; Code:
 
@@ -36,7 +39,7 @@
 ;;; Utilities
 
 (defun org-tick--mem-filtered-entries (filter-fn)
-  "Return a list of org-mem entries tagged \"proj\"."
+  "Return a list of org-mem entries filtered by FILTER-FN."
   (let ((entries (org-mem-all-entries)))
     (cl-remove-if-not filter-fn entries)))
 
@@ -54,6 +57,7 @@
           entries))
 
 (defun org-tick--mem-get-ticket-completion-options ()
+  "Get completion options for org-mem entries filtered by org-tick."
   (org-tick--mem-entries-to-completion-options (org-tick--mem-get-ticket-entries)))
 
 (defun org-tick--mem-goto (entry)
@@ -69,11 +73,11 @@
     entry))
 
 (defun org-tick--get-active-ticket-repo-property ()
-  "return the active org-tick ticket's repo property as a path."
+  "Return the active org-tick ticket's repo property as a path."
   (org-mem-entry-property "REPO" (org-tick--get-active-ticket)))
 
 (defun org-tick--set-active-ticket (entry)
-  "Take an entry and set it as the active ticket."
+  "Take an ENTRY and set it as the active ticket."
   (cl-assert (org-mem-entry-p entry))
   (setq org-tick-active-ticket-id (org-mem-entry-id entry)))
 

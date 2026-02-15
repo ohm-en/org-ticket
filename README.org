@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       54379578-C152-45EC-881B-A505E77D49C3
+:END:
+#+TITLE: org-tick
+
+An opinionated org-mode utility for managing tickets.
