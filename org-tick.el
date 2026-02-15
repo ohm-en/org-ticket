@@ -1,4 +1,4 @@
-;;; org-tick.el --- An opinionated org-mode utility for managing tickets. --- -*- lexical-binding: t; -*-
+;;; org-tick.el --- An opinionated org-mode utility for managing tickets. --- -*- lexical-binding: t -*-
 
 ;;; Commentary:
 ;;; TODO: Add commentary
@@ -32,12 +32,6 @@
   "Return the org-tick version string."
   (interactive)
   (message "org-tick version %s" "0.0.1"))
-
-(defvar org-tick-ticket-choice-map nil
-  "Prefix keymap for org-ticket ticket choices.")
-
-(define-prefix-command 'org-tick-ticket-choice-map)
-(define-key org-tick-ticket-choice-map (kbd "q") #'keyboard-quit)
 
 ;;; Utilities
 
@@ -84,6 +78,7 @@
   (cl-assert (org-mem-entry-p entry))
   (setq org-tick-active-ticket-id (org-mem-entry-id entry)))
 
+;;;###autoload
 (defun org-tick-open-active-status-magit ()
   "Open the active ticket's repo in magit status."
   (interactive)
@@ -92,15 +87,13 @@
          (repo-path (file-name-directory (expand-file-name repo-property))))
     (magit-status repo-path)))
 
-(define-key org-tick-ticket-choice-map (kbd "g") #'org-tick-open-active-status-magit)
-
+;;;###autoload
 (defun org-tick-open-active ()
   "Open the active ticket in the current buffer."
   (interactive)
   (org-tick--mem-goto (org-tick--get-active-ticket)))
 
-(define-key org-tick-ticket-choice-map (kbd "o") #'org-tick-open-active)
-
+;;;###autoload
 (defun org-tick-find ()
   "Select an active ticket from a list of nodes."
   (interactive)
@@ -113,7 +106,19 @@
                        "[o] Open  [g] Magit  [q] Quit")
     ))
 
-(define-key org-tick-ticket-choice-map (kbd "f") #'org-tick-find)
+;;; Keymap
+;;;###autoload
+(defvar org-tick-ticket-choice-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "q") #'keyboard-quit)
+    (define-key map (kbd "f") #'org-tick-find)
+    (define-key map (kbd "o") #'org-tick-open-active)
+    (define-key map (kbd "g") #'org-tick-open-active-status-magit)
+    map)
+  "Prefix keymap for org-ticket ticket choices.")
+
+;;;###autoload
+(define-prefix-command 'org-tick-ticket-choice-map)
 
 (provide 'org-tick)
 ;;; org-tick.el ends here
