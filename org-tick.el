@@ -1,4 +1,4 @@
-;;; org-tick.el --- An opinionated org-mode utility for managing tickets. -*- lexical-binding: t; -*-
+;;; org-tick.el --- An opinionated org-mode utility for managing tickets. --- -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;; TODO: Add commentary
@@ -32,6 +32,9 @@
   "Return the org-tick version string."
   (interactive)
   (message "org-tick version %s" "0.0.1"))
+
+(defvar org-tick-ticket-choice-map nil
+  "Prefix keymap for org-ticket ticket choices.")
 
 (define-prefix-command 'org-tick-ticket-choice-map)
 (define-key org-tick-ticket-choice-map (kbd "q") #'keyboard-quit)
